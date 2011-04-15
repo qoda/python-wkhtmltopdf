@@ -9,7 +9,7 @@ setup(
     author_email='jpbydendyk@gmail.com',
     license='BSD',
     url='http://github.com/qoda/python-wkhtmltopdf',
-    packages = find_packages(),
+    packages = find_packages('src'),
     dependency_links = [],
     install_requires = [],
     include_package_data=True,

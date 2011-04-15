@@ -25,6 +25,10 @@ A simple python wrapper for the wkhtmltopdf lib (http://code.google.com/p/wkhtml
 
         $ sudo apt-get install openssl build-essential xorg libssl-dev libxrender-dev
         $ sudo apt-get install wkhtmltopdf
+    
+4. Install flashplugin:
+
+        $ sudo apt-get install flashplugin-nonfree
 
 ### python-wkhtmltopdf
 
