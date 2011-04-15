@@ -40,7 +40,6 @@ A simple python wrapper for the wkhtmltopdf lib (http://code.google.com/p/wkhtml
 
         from wkhtmltopdf import WKHtmlToPdf
     
-        wkhtmltopdf = WKHtmlToPdf(url='', output_file='')
-        wkhtmltopdf.render(screen_resolution=[1024, 768], color=24flash_plugin=True, )
-        create_pdf("http://www.google.com", 'google.com.pdf')        # throws CompilationError if the file is not created.
+        wkhtmltopdf = WKHtmlToPdf(url='http://www.google.com', output_file='google.pdf')
+        wkhtmltopdf.render(screen_resolution=[1024, 768], color_depth=24, flash_plugin=True, delay=0)
     
