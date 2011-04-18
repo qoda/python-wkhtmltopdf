@@ -18,6 +18,8 @@ A simple python wrapper for the wkhtmltopdf lib (http://code.google.com/p/wkhtml
 1. Install Xvfd:
 
         $ sudo apt-get install xvfb x11-xkb-utils xserver-xorg-core
+        $ Xvfb :0 -screen 0 1024x768x24 & DISPLAY=127.0.0.1:0
+        $ 
     
 2. Install Fonts:
 
@@ -44,14 +46,26 @@ A simple python wrapper for the wkhtmltopdf lib (http://code.google.com/p/wkhtml
 
 ### Simple Usage:
 
-    from wkhtmltopdf import WKHtmlToPdf
-    
-    wkhtmltopdf = WKHtmlToPdf(
-        url='http://www.google.com',
-        output_file='google.pdf',
+1. Use from class:
+
+        from wkhtmltopdf import WKHtmlToPdf
         
-    )
-    wkhtmltopdf.render()
+        wkhtmltopdf = WKHtmlToPdf(
+            url='http://www.google.com',
+            output_file='google.pdf',
+            
+        )
+        wkhtmltopdf.render()
+        
+2. Use from method:
+        
+        from wkhtmltopdf import wkhtmltopdf
+        
+        wkhtmltopdf(url='google.com', output_file='google.pdf')
+        
+3. Use from commandline (installed):
+        
+        $ python -m wkhtmltopdf.main -u google.com -f google.pdf
         
 ### Required Arguments:
 
@@ -64,7 +78,7 @@ A simple python wrapper for the wkhtmltopdf lib (http://code.google.com/p/wkhtml
     * color_depth (default: 24 (bit))
     * flash_plugin (default: True)
     * disable_javascript (default: False)
-    * delay (default: 0 (millisecs))
+    * delay (default: 0 (secs))
     * orientation (default: Portrait)
     * dpi (default: 100)
     * no_background (default: False)
