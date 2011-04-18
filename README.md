@@ -6,12 +6,14 @@ A simple python wrapper for the wkhtmltopdf lib (http://code.google.com/p/wkhtml
 
 ### System:
     
+    * Xvfd
     * wkhtmltopdf
     * flashplugin-nonfree
+    * python 2.5+
 
 ## Installation
 
-### wkhtmltopdf - full installation
+### wkhtmltopdf
 
 1. Install Xvfd:
 
@@ -40,10 +42,33 @@ A simple python wrapper for the wkhtmltopdf lib (http://code.google.com/p/wkhtml
 
 ## Usage
 
-1. Create and save a pdf from a URL:
+### Simple Usage
 
         from wkhtmltopdf import WKHtmlToPdf
-    
-        wkhtmltopdf = WKHtmlToPdf(url='http://www.google.com', output_file='google.pdf')
-        wkhtmltopdf.render(screen_resolution=[1024, 768], color_depth=24, flash_plugin=True, delay=0)
+        
+        wkhtmltopdf = WKHtmlToPdf(
+            url='http://www.google.com',
+            output_file='google.pdf',
+            
+        )
+        wkhtmltopdf.render()
+        
+### Required Arguments
+
+    * url - the url to convert to pdf
+    * output_file - the pdf file that you want to create
+        
+### Optional Arguments
+
+    * screen_resolution (default: [1024, 768])
+    * color_depth (default: 24 (bit))
+    * flash_plugin (default: True)
+    * disable_javascript (default: False)
+    * delay (default: 0 (millisecs))
+    * orientation (default: Portrait)
+    * dpi (default: 100)
+    * no_background (default: False)
+    * grayscale (default: False)
+    * http_username (default: None)
+    * http_password (default: None)
     
