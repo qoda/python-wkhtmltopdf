@@ -44,14 +44,14 @@ A simple python wrapper for the wkhtmltopdf lib (http://code.google.com/p/wkhtml
 
 ### Simple Usage:
 
-        from wkhtmltopdf import WKHtmlToPdf
+    from wkhtmltopdf import WKHtmlToPdf
+    
+    wkhtmltopdf = WKHtmlToPdf(
+        url='http://www.google.com',
+        output_file='google.pdf',
         
-        wkhtmltopdf = WKHtmlToPdf(
-            url='http://www.google.com',
-            output_file='google.pdf',
-            
-        )
-        wkhtmltopdf.render()
+    )
+    wkhtmltopdf.render()
         
 ### Required Arguments:
 
