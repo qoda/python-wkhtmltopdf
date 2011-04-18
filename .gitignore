@@ -1,6 +1,7 @@
 build/
 dist/
-*.egg-info/
+*.DS_Store
+*.egg-info
 *.komodoproject
 *.pdf
 *.pyc

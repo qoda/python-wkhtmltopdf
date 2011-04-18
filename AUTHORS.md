@@ -1,7 +1,3 @@
-Authors
-=======
+# Authors:
 
-saidWot
--------
-
-* Jonathan Bydendyk (jonathan@saidwot.com)
+    * Jonathan Bydendyk (jonathan@saidwot.com)
