@@ -42,7 +42,7 @@ A simple python wrapper for the wkhtmltopdf lib (http://code.google.com/p/wkhtml
 
 ## Usage
 
-### Simple Usage
+### Simple Usage:
 
         from wkhtmltopdf import WKHtmlToPdf
         
@@ -53,12 +53,12 @@ A simple python wrapper for the wkhtmltopdf lib (http://code.google.com/p/wkhtml
         )
         wkhtmltopdf.render()
         
-### Required Arguments
+### Required Arguments:
 
     * url - the url to convert to pdf
     * output_file - the pdf file that you want to create
         
-### Optional Arguments
+### Optional Arguments:
 
     * screen_resolution (default: [1024, 768])
     * color_depth (default: 24 (bit))
