@@ -17,21 +17,18 @@ A simple python wrapper for the wkhtmltopdf lib (http://code.google.com/p/wkhtml
 
 1. Install Xvfd:
 
-        $ sudo apt-get install xvfb x11-xkb-utils xserver-xorg-core
-        $ Xvfb :0 -screen 0 1024x768x24 & DISPLAY=127.0.0.1:0
-        $ 
+        $ sudo apt-get install xvfb
     
 2. Install Fonts:
 
         $ sudo apt-get install xfonts-100dpi xfonts-75dpi xfonts-scalable xfonts-cyrillic
     
 3. Install wkhtmltopdf:
-
-        $ sudo apt-get install openssl build-essential xorg libssl-dev libxrender-dev
+        
         $ sudo apt-get install wkhtmltopdf
     
 4. Install flashplugin:
-
+        
         $ sudo apt-get install flashplugin-nonfree
 
 ### python-wkhtmltopdf
