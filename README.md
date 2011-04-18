@@ -5,11 +5,11 @@ A simple python wrapper for the wkhtmltopdf lib (http://code.google.com/p/wkhtml
 ## Requirements
 
 ### System:
-    
-    * Xvfd
-    * wkhtmltopdf
-    * flashplugin-nonfree
-    * python 2.5+
+
+- Xvfd
+- wkhtmltopdf
+- flashplugin-nonfree
+- python 2.5+
 
 ## Installation
 
@@ -66,20 +66,20 @@ A simple python wrapper for the wkhtmltopdf lib (http://code.google.com/p/wkhtml
         
 ### Required Arguments:
 
-    * url - the url to convert to pdf
-    * output_file - the pdf file that you want to create
+- **url** - the url to convert to pdf
+- **output_file** - the pdf file that you want to create
         
 ### Optional Arguments:
 
-    * screen_resolution (default: [1024, 768])
-    * color_depth (default: 24 (bit))
-    * flash_plugin (default: True)
-    * disable_javascript (default: False)
-    * delay (default: 0 (secs))
-    * orientation (default: Portrait)
-    * dpi (default: 100)
-    * no_background (default: False)
-    * grayscale (default: False)
-    * http_username (default: None)
-    * http_password (default: None)
+- **screen_resolution** (default: [1024, 768])
+- **color_depth** (default: 24 (bit))
+- **flash_plugin** (default: True)
+- **disable_javascript** (default: False)
+- **delay** (default: 0 (secs))
+- **orientation** (default: Portrait)
+- **dpi** (default: 100)
+- **no_background** (default: False)
+- **grayscale** (default: False)
+- **http_username** (default: None)
+- **http_password** (default: None)
     

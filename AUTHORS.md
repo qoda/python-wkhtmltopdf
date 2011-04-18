@@ -1,3 +1,3 @@
 # Authors:
 
-    * Jonathan Bydendyk (jonathan@saidwot.com)
+- Jonathan Bydendyk (jpbydendyk@gmail.com)
