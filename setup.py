@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='python-wkhtmltopdf',
+    name='wkhtmltopdf',
     version='0.1',
     description='Simple python wrapper for wkhtmltopdf',
     long_description = open('README.rst', 'r').read() + open('AUTHORS.rst', 'r').read() + open('CHANGELOG.rst', 'r').read(),
