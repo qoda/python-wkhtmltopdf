@@ -20,6 +20,11 @@ class WKhtmlToPdf(object):
         
         if not self.url or not self.output_file:
             raise Exception("Missing url and output file arguments")
+            
+        # save the file to /tmp if a full path is not specified
+        output_path = os.path.split(self.output_file)[0]
+        if not output_path:
+            self.output_file = os.path.join('/tmp', self.output_file)
         
         self.defaults = {
             'screen_resolution': [kwargs.get('screen_resolution', [1024, 768]), list],
@@ -87,6 +92,9 @@ class WKhtmlToPdf(object):
             self.output_file
         )
         os.system(command)
+        
+        print self.output_file
+        return self.output_file
         
 def wkhtmltopdf(*args, **kwargs):
     wkhp = WKhtmlToPdf(*args, **kwargs)
