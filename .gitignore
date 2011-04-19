@@ -3,5 +3,6 @@ dist/
 *.DS_Store
 *.egg-info
 *.komodoproject
+*.log
 *.pdf
 *.pyc
