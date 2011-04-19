@@ -21,9 +21,9 @@ class RequestHandler(BaseHTTPRequestHandler):
         self.handle_headers(404)
         self.wfile.write('{"error": "%s"}"' % message)
     
-    def handle_200(self, message):
+    def handle_200(self, message, file_path):
         self.handle_headers(200)
-        self.wfile.write('{"success": "%s"}"' % message)
+        self.wfile.write('{"success": "%s", "file_path": %s}"' % (message, file_path))
     
     def do_GET(self):
         # get the query string variables
@@ -32,18 +32,18 @@ class RequestHandler(BaseHTTPRequestHandler):
         self.query_dict = urlparse.parse_qs(self.query_string)
         
         # get the url and output_file
-        self.url = self.query_dict.get('url', None)
-        self.output_file = self.query_dict.get('output_file', None)
+        self.url = self.query_dict.get('url', [None, ])[0]
+        self.output_file = self.query_dict.get('output_file', [None, ])[0]
         
         if not self.url or not self.output_file:
             self.handle_404("url and output_file params are required")
             return None
         
         wkhtp = WKhtmlToPdf(self.url, self.output_file)
-        print wkhtp.render()
+        output_file = wkhtp.render()
         
         # send json response
-        self.handle_200("file created successfully")
+        self.handle_200("the file has been saved", output_file)
         
         return None
 
