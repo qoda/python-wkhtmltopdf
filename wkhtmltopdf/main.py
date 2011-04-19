@@ -7,9 +7,19 @@ class WKhtmlToPdf(object):
     """
     
     def __init__(self, *args, **kwargs):
+        self.url = None
+        self.output_file = None
+        
+        # get the url and output_file options
+        try:
+            self.url, self.output_file = args[0], args[1]
+        except IndexError:
+            pass
+        
+        if not self.url or not self.output_file:
+            raise Exception("Missing url and output file arguments")
+        
         self.defaults = {
-            'url': [kwargs.get('url', ""), str],
-            'output_file': [kwargs.get('output_file', ""), str],
             'screen_resolution': [kwargs.get('screen_resolution', [1024, 768]), list],
             'color_depth': [kwargs.get('color_depth', 24), int],
             'flash_plugin': [kwargs.get('flash_plugin', True), bool],
@@ -29,9 +39,6 @@ class WKhtmlToPdf(object):
             if k is "orientation" and v[0] not in ['Portrait', 'Landscape']:
                 raise TypeError("Orientation argument must be either Portrait or Landscape")
             setattr(self, k, v[0])
-        
-        if not self.url or not self.output_file:
-            raise Exception("Missing url and output file arguments")
     
     def _create_option_list(self):
         """
@@ -86,10 +93,9 @@ def wkhtmltopdf(*args, **kwargs):
 if __name__ == '__main__':
     
     # parse through the system argumants
-    usage = "usage: %prog [options] arg1 arg2"
+    usage = "usage: %prog [options] url output_file"
     parser = optparse.OptionParser()
-    parser.add_option("-u", "--url", dest="url", default=True, help="url to convert")
-    parser.add_option("-f", "--output-file", dest="output_file", default=True, help="output file path")
+    
     parser.add_option("-F", "--flash-plugin", action="store_true", dest="flash_plugin", default=True, help="use flash plugin")
     parser.add_option("-J", "--disable-javascript", action="store_true", dest="disable_javascript", default=False, help="disable javascript")
     parser.add_option("-b", "--no-background", action="store_true", dest="no_background", default=False, help="do not print background")
@@ -99,8 +105,9 @@ if __name__ == '__main__':
     parser.add_option("-D", "--dpi", dest="dpi", default=100, help="print dpi")
     parser.add_option("-U", "--username", dest="http_username", default="", help="http username")
     parser.add_option("-P", "--password", dest="http_password", default="", help="http password")
-    (options, args) = parser.parse_args()
-    options = options.__dict__
+    
+    options, args = parser.parse_args()
+    
     # call the main method with parsed argumants
-    wkhtmltopdf(**options)
+    wkhtmltopdf(*args, **options.__dict__)
     
