@@ -1,6 +1,6 @@
 python-wkhtmltopdf
 ==================
-A simple python wrapper for the wkhtmltopdf lib (http://code.google.com/p/wkhtmltopdf/) with flash support.
+A simple python wrapper for the wkhtmltopdf lib (http://code.example.com/p/wkhtmltopdf/) with flash support.
 
 Requirements
 ------------
@@ -55,8 +55,8 @@ Simple Usage::
     from wkhtmltopdf import WKHtmlToPdf
     
     wkhtmltopdf = WKHtmlToPdf(
-        url='http://www.google.com',
-        output_file='google.pdf',
+        url='http://www.example.com',
+        output_file='~/example.pdf',
     )
     wkhtmltopdf.render()
         
@@ -64,11 +64,11 @@ Simple Usage::
         
     from wkhtmltopdf import wkhtmltopdf
     
-    wkhtmltopdf(url='google.com', output_file='google.pdf')
+    wkhtmltopdf(url='example.com', output_file='~/example.pdf')
         
 3. Use from commandline (installed)::
         
-    $ python -m wkhtmltopdf.main google.com google.pdf
+    $ python -m wkhtmltopdf.main example.com ~/example.pdf
         
 Required Arguments:
 ~~~~~~~~~~~~~~~~~~~
