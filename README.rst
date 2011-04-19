@@ -51,7 +51,7 @@ Simple Usage::
 ~~~~~~~~~~~~~~
 
 1. Use from class::
-
+    
     from wkhtmltopdf import WKHtmlToPdf
     
     wkhtmltopdf = WKHtmlToPdf(

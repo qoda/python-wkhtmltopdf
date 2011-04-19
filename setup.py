@@ -4,7 +4,7 @@ setup(
     name='wkhtmltopdf',
     version='0.1',
     description='Simple python wrapper for wkhtmltopdf',
-    long_description = open('README.md', 'r').read() + open('AUTHORS.md', 'r').read(),
+    long_description = "%s\n\n%s" % (open('README.rst', 'r').read(), open('AUTHORS.rst', 'r').read()),
     author='Qoda',
     author_email='jpbydendyk@gmail.com',
     license='BSD',
