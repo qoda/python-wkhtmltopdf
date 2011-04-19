@@ -7,7 +7,7 @@ class MainTestCase(unittest.TestCase):
     def setUp(self):
         self.url = "http://www.example.com"
         self.output_file = "/tmp/example.pdf"
-        self.wkhtmltopdf = WKhtmlToPdf(url=self.url, output_file=self.output_file)
+        self.wkhtmltopdf = WKhtmlToPdf(self.url, self.output_file)
     
     def test_wkhtmltopdf_options(self):
         # test default options
@@ -42,12 +42,12 @@ class MainTestCase(unittest.TestCase):
         self.assertEqual(self.wkhtmltopdf._create_option_list(), ['--disable-javascript', '--no-background', '--grayscale', '--redirect-delay 1', '--orientation Landscape', '--dpi 300'])
     
     def test_wkhtmltopdf_callable(self):
-        wkhtmltopdf(url=self.url, output_file=self.output_file)
+        wkhtmltopdf(self.url, self.output_file)
         self.assertTrue(os.path.exists(self.output_file))
     
     def tearDown(self):
         try:
-            os.remove('/tmp/example.pdf')
+            os.remove(self.output_file)
         except OSError:
             pass
 
