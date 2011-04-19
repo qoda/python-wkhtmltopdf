@@ -2,11 +2,15 @@
 
 import optparse
 import os
+import time
 import urlparse
 
 from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
 
 from main import WKhtmlToPdf
+
+HOST = 'localhost'
+PORT = 8888
 
 class RequestHandler(BaseHTTPRequestHandler):
     """
@@ -15,10 +19,16 @@ class RequestHandler(BaseHTTPRequestHandler):
     def handle_headers(self, status_code):
         self.send_response(status_code)
         self.send_header('Content-Type', 'application/json')
+        self.send_header('Access-Control-Allow-Origin', host)
         self.end_headers()
         
     def handle_404(self, message):
         self.handle_headers(404)
+        self.wfile.write('{"error": "%s"}"' % message)
+        self.end_headers()
+        
+    def handle_500(self, message):
+        self.handle_headers(500)
         self.wfile.write('{"error": "%s"}"' % message)
     
     def handle_200(self, message, file_path):
@@ -43,8 +53,10 @@ class RequestHandler(BaseHTTPRequestHandler):
         output_file = wkhtp.render()
         
         # send json response
-        self.handle_200("the file has been saved", output_file)
-        
+        if output_file[0]:
+            self.handle_200("the file has been saved", output_file[1])
+        else:
+            self.handle_500("%s - the file could not be created" % output_file[1])
         return None
 
 if __name__ == '__main__':
@@ -56,7 +68,15 @@ if __name__ == '__main__':
     parser.add_option("-p", "--port", dest="port", default=8888, help="port to run the api on")
     options, args = parser.parse_args()
     
-    # start the server
-    server = HTTPServer((options.host, options.port), RequestHandler)
-    print 'Starting server (http://%s:%s), use <Ctrl-C> to stop' % (options.host, options.port)
-    server.serve_forever()
+    # set host and port
+    host = options.host
+    port = int(options.port)
+    
+    # handle the server
+    server = HTTPServer((host, port), RequestHandler)
+    try:
+        print time.asctime(), 'Starting server (http://%s:%s), use <Ctrl-C> to stop' % (host, port) 
+        server.serve_forever()
+    except KeyboardInterrupt:
+        server.server_close()
+        print time.asctime(), 'Stopping server (http://%s:%s)' % (host, port)
