@@ -62,7 +62,7 @@ A simple python wrapper for the wkhtmltopdf lib (http://code.google.com/p/wkhtml
         
 3. Use from commandline (installed):
         
-        $ python -m wkhtmltopdf.main -u google.com -f google.pdf
+        $ python -m wkhtmltopdf.main google.com google.pdf
         
 ### Required Arguments:
 
