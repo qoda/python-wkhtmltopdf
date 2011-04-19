@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import os
 import optparse
 
@@ -79,7 +81,7 @@ class WKhtmlToPdf(object):
             os.environ["DISPLAY"] = '127.0.0.1:0'
         
         # execute the command
-        command = "wkhtmltopdf %s %s %s" % (
+        command = "wkhtmltopdf %s %s %s >> /tmp/wkhtp.log" % (
             " ".join(self._create_option_list()),
             self.url,
             self.output_file
