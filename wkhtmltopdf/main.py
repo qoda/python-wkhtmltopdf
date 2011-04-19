@@ -91,10 +91,12 @@ class WKhtmlToPdf(object):
             self.url,
             self.output_file
         )
-        os.system(command)
+        sys_output = int(os.system(command))
         
-        print self.output_file
-        return self.output_file
+        # return file if successful else return error code
+        if not sys_output:
+            return True, self.output_file
+        return False, sys_output
         
 def wkhtmltopdf(*args, **kwargs):
     wkhp = WKhtmlToPdf(*args, **kwargs)
