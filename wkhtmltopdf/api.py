@@ -59,7 +59,6 @@ class RequestHandler(BaseHTTPRequestHandler):
         # get the url and output_file
         self.url = self.query_dict.get('url', [None, ])[0]
         self.output_file = self.query_dict.get('output_file', [None, ])[0]
-        self.output_file = os.path.join(os.path.split(self.output_file)[0], "%s.pdf" % random.randint(0, 9999999))
         
         if not self.url or not self.output_file:
             self.handle_404("url and output_file params are required")
