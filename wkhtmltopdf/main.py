@@ -75,15 +75,15 @@ class WKhtmlToPdf(object):
         """
         Render the URL into a pdf and setup the evironment if required.
         """
+        
         # setup the environment if it isn't set up yet
-        display_env_var = os.environ.get('DISPLAY', None)
-        if not display_env_var:
-            os.system("Xvfb :0 -screen 0 %sx%sx%s & DISPLAY=127.0.0.1:0" % (
+        if not os.getenv('DISPLAY'):
+            os.system("Xvfb :0 -screen 0 %sx%sx%s & " % (
                 self.screen_resolution[0],
                 self.screen_resolution[1],
                 self.color_depth
             ))
-            os.environ["DISPLAY"] = '127.0.0.1:0'
+            os.putenv("DISPLAY", '127.0.0.1:0')
         
         # execute the command
         command = "wkhtmltopdf %s %s %s >> /tmp/wkhtp.log" % (
@@ -105,7 +105,7 @@ def wkhtmltopdf(*args, **kwargs):
 if __name__ == '__main__':
     
     # parse through the system argumants
-    usage = "usage: %prog [options] url output_file"
+    usage = "Usage: %prog [options] url output_file"
     parser = optparse.OptionParser()
     
     parser.add_option("-F", "--flash-plugin", action="store_true", dest="flash_plugin", default=True, help="use flash plugin")

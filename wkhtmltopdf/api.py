@@ -2,6 +2,7 @@
 
 import optparse
 import os
+import random
 import time
 import urlparse
 
@@ -9,8 +10,19 @@ from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
 
 from main import WKhtmlToPdf
 
-HOST = 'localhost'
+HOST = '127.0.0.1'
 PORT = 8888
+
+def run_server(handler, host, port):
+    server = HTTPServer((host, port), handler)
+    try:
+        server.serve_forever()
+        print time.asctime(), 'Starting server (http://%s:%s), use <Ctrl-C> to stop' % (host, port) 
+        return True
+    except KeyboardInterrupt:
+        server.server_close()
+        print time.asctime(), 'Stopping server (http://%s:%s)' % (host, port)
+        return True
 
 class RequestHandler(BaseHTTPRequestHandler):
     """
@@ -31,9 +43,12 @@ class RequestHandler(BaseHTTPRequestHandler):
         self.handle_headers(500)
         self.wfile.write('{"error": "%s"}"' % message)
     
-    def handle_200(self, message, file_path):
+    def handle_200(self, message, file_path=None):
         self.handle_headers(200)
-        self.wfile.write('{"success": "%s", "file_path": %s}"' % (message, file_path))
+        if file_path:
+            self.wfile.write('{"success": "%s", "file_path": %s}"' % (message, file_path))
+        else:
+            self.wfile.write('{"success": "%s"}"' % message)
     
     def do_GET(self):
         # get the query string variables
@@ -44,6 +59,7 @@ class RequestHandler(BaseHTTPRequestHandler):
         # get the url and output_file
         self.url = self.query_dict.get('url', [None, ])[0]
         self.output_file = self.query_dict.get('output_file', [None, ])[0]
+        self.output_file = os.path.join(os.path.split(self.output_file)[0], "%s.pdf" % random.randint(0, 9999999))
         
         if not self.url or not self.output_file:
             self.handle_404("url and output_file params are required")
@@ -64,8 +80,8 @@ if __name__ == '__main__':
     # parse through the system argumants
     usage = "usage: %prog [options]"
     parser = optparse.OptionParser()
-    parser.add_option("-H", "--host", dest="host", default="localhost", help="server host name")
-    parser.add_option("-p", "--port", dest="port", default=8888, help="port to run the api on")
+    parser.add_option("-H", "--host", dest="host", default=HOST, help="server host name")
+    parser.add_option("-p", "--port", dest="port", default=PORT, help="port to run the api on")
     options, args = parser.parse_args()
     
     # set host and port
@@ -73,10 +89,4 @@ if __name__ == '__main__':
     port = int(options.port)
     
     # handle the server
-    server = HTTPServer((host, port), RequestHandler)
-    try:
-        print time.asctime(), 'Starting server (http://%s:%s), use <Ctrl-C> to stop' % (host, port) 
-        server.serve_forever()
-    except KeyboardInterrupt:
-        server.server_close()
-        print time.asctime(), 'Stopping server (http://%s:%s)' % (host, port)
+    run_server(RequestHandler, host, port)

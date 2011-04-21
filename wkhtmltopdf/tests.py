@@ -1,9 +1,12 @@
 #!/usr/bin/env python
 
 import os
+import time
 import unittest
+import urllib
 
 from main import WKhtmlToPdf, wkhtmltopdf
+from api import run_server, RequestHandler, HOST, PORT
 
 class MainTestCase(unittest.TestCase):
     def setUp(self):
@@ -48,10 +51,28 @@ class MainTestCase(unittest.TestCase):
         self.assertTrue(os.path.exists(self.output_file))
     
     def tearDown(self):
+        """
         try:
             os.remove(self.output_file)
         except OSError:
             pass
-
+        """
+class ApiTestCase(unittest.TestCase):
+    def setUp(self):
+        self.url = "http://www.example.com"
+        self.output_file = "/tmp/example2.pdf"
+    
+    def test_api(self):
+        # run the server manually before running this test
+        urllib.urlopen("http://%s:%s/?url=%s&output_file=%s" % (HOST, PORT, self.url, self.output_file))
+        self.assertTrue(os.path.exists(self.output_file))
+    
+    def tearDown(self):
+        """
+        try:
+            os.remove(self.output_file)
+        except OSError:
+            pass
+        """
 if __name__ == '__main__':
     unittest.main()
