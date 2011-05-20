@@ -51,12 +51,10 @@ class MainTestCase(unittest.TestCase):
         self.assertTrue(os.path.exists(self.output_file))
     
     def tearDown(self):
-        """
         try:
             os.remove(self.output_file)
         except OSError:
             pass
-        """
 class ApiTestCase(unittest.TestCase):
     def setUp(self):
         self.url = "http://www.example.com"
@@ -68,11 +66,9 @@ class ApiTestCase(unittest.TestCase):
         self.assertTrue(os.path.exists(self.output_file))
     
     def tearDown(self):
-        """
         try:
             os.remove(self.output_file)
         except OSError:
             pass
-        """
 if __name__ == '__main__':
     unittest.main()
