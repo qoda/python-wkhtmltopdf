@@ -31,7 +31,7 @@ class WKhtmlToPdf(object):
             'color_depth': [kwargs.get('color_depth', 24), int],
             'flash_plugin': [kwargs.get('flash_plugin', True), bool],
             'disable_javascript': [kwargs.get('disable_javascript', False), bool],
-            'delay': [kwargs.get('delay', 0.0)/1000.0, float],
+            'delay': [kwargs.get('delay', 0), int],
             'orientation': [kwargs.get('orientation', 'Portrait'), str],
             'dpi': [kwargs.get('dpi', 100), int],
             'no_background': [kwargs.get('no_background', False), bool],
@@ -44,7 +44,8 @@ class WKhtmlToPdf(object):
             if not isinstance(v[0], v[1]):
                 try:
                     v[0] = v[1](v[0])
-                except:
+                    print v[0]
+                except TypeError:
                     raise TypeError("%s argument required for %s" % (v[1].__name__.capitalize(), k))
             if k is "orientation" and v[0] not in ['Portrait', 'Landscape']:
                 raise TypeError("Orientation argument must be either Portrait or Landscape")
@@ -94,6 +95,7 @@ class WKhtmlToPdf(object):
             self.url,
             self.output_file
         )
+        print command
         sys_output = int(os.system(command))
         
         # return file if successful else return error code
