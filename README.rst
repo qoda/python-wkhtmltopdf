@@ -88,7 +88,7 @@ Optional Arguments:
 - **color_depth** (default: 24 (bit))
 - **flash_plugin** (default: True)
 - **disable_javascript** (default: False)
-- **delay** (default: 0 (secs))
+- **delay** (default: 0 (millisecs))
 - **orientation** (default: Portrait)
 - **dpi** (default: 100)
 - **no_background** (default: False)
