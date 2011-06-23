@@ -42,7 +42,10 @@ class WKhtmlToPdf(object):
         
         for k, v in self.defaults.items():
             if not isinstance(v[0], v[1]):
-                raise TypeError("%s argument required for %s" % (v[1].__name__.capitalize(), k))
+                try:
+                    v[0] = v[1](v[0])
+                except:
+                    raise TypeError("%s argument required for %s" % (v[1].__name__.capitalize(), k))
             if k is "orientation" and v[0] not in ['Portrait', 'Landscape']:
                 raise TypeError("Orientation argument must be either Portrait or Landscape")
             setattr(self, k, v[0])
