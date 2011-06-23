@@ -65,7 +65,12 @@ class RequestHandler(BaseHTTPRequestHandler):
             self.handle_404("url and output_file params are required")
             return None
         
-        wkhtp = WKhtmlToPdf(self.url, self.output_file, **self.query_dict)
+        # convert all query objects from list to single items
+        options_dict = {}
+        for k, v in self.query_dict.items():
+            options_dict[k] = v[0]
+        
+        wkhtp = WKhtmlToPdf(self.url, self.output_file, **options_dict)
         output_file = wkhtp.render()
         
         # send json response
