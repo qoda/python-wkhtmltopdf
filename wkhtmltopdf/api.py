@@ -60,11 +60,12 @@ class RequestHandler(BaseHTTPRequestHandler):
         self.url = self.query_dict.get('url', [None, ])[0]
         self.output_file = self.query_dict.get('output_file', [None, ])[0]
         
+        # return error if url or output_file are missing
         if not self.url or not self.output_file:
             self.handle_404("url and output_file params are required")
             return None
         
-        wkhtp = WKhtmlToPdf(self.url, self.output_file)
+        wkhtp = WKhtmlToPdf(self.url, self.output_file, **self.query_dict)
         output_file = wkhtp.render()
         
         # send json response
