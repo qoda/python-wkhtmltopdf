@@ -1,6 +1,6 @@
 python-wkhtmltopdf
 ==================
-A simple python wrapper for the wkhtmltopdf lib (http://code.example.com/p/wkhtmltopdf/) with flash support.
+A simple python wrapper for the wkhtmltopdf lib (http://code.google.com/p/wkhtmltopdf/) with flash support.
 
 Requirements
 ------------
