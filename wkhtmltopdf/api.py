@@ -44,10 +44,14 @@ class RequestHandler(BaseHTTPRequestHandler):
         self.wfile.write('{"error": "%s"}"' % message)
     
     def handle_200(self, message, file_path=None):
-        self.handle_headers(200)
+        self.send_response(200)
         if file_path:
-            self.wfile.write('{"success": "%s", "file_path": %s}"' % (message, file_path))
+            self.send_header('Content-Type', 'application/pdf')
+            self.end_headers()
+            self.wfile.write(open(file_path, 'r').read())
         else:
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
             self.wfile.write('{"success": "%s"}"' % message)
     
     def do_GET(self):
@@ -78,7 +82,6 @@ class RequestHandler(BaseHTTPRequestHandler):
             self.handle_200("the file has been saved", output_file[1])
         else:
             self.handle_500("%s - the file could not be created" % output_file[1])
-        return None
 
 if __name__ == '__main__':
     

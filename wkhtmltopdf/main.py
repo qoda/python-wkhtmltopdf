@@ -7,7 +7,6 @@ class WKhtmlToPdf(object):
     """
     Convert an html page via its URL into a pdf.
     """
-    
     def __init__(self, *args, **kwargs):
         self.url = None
         self.output_file = None
@@ -90,7 +89,7 @@ class WKhtmlToPdf(object):
             os.putenv("DISPLAY", '127.0.0.1:0')
         
         # execute the command
-        command = "wkhtmltopdf %s %s %s >> /tmp/wkhtp.log" % (
+        command = 'wkhtmltopdf %s "%s" "%s" >> /tmp/wkhtp.log' % (
             " ".join(self._create_option_list()),
             self.url,
             self.output_file
