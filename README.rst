@@ -95,4 +95,6 @@ Optional Arguments:
 - **grayscale** (default: False)
 - **http_username** (default: None)
 - **http_password** (default: None)
+- **header_html** (default: None)
+- **footer_html** (default: None)
     
