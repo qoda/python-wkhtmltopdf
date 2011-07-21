@@ -37,6 +37,8 @@ class WKhtmlToPdf(object):
             'grayscale': [kwargs.get('grayscale', False), bool],
             'http_username': [kwargs.get('http_username', ""), str],
             'http_password': [kwargs.get('http_password', ""), str],
+            'header_html': [kwargs.get('header_html'), "", str],
+            'footer_html': [kwargs.get('footer_html'), "", str],
         }
         
         for k, v in self.defaults.items():
@@ -71,6 +73,8 @@ class WKhtmlToPdf(object):
             option_list.append("--password %s" % self.http_password)
         option_list.append("--orientation %s" % self.orientation)
         option_list.append("--dpi %s" % self.dpi)
+        option_list.append("--header-html %s", self.header_html)
+        option_list.append("--footer-html %s", self.footer_html)
         
         return option_list
         
@@ -121,6 +125,8 @@ if __name__ == '__main__':
     parser.add_option("-D", "--dpi", dest="dpi", default=100, help="print dpi")
     parser.add_option("-U", "--username", dest="http_username", default="", help="http username")
     parser.add_option("-P", "--password", dest="http_password", default="", help="http password")
+    parser.add_option("-h", "--header-html", dest="header_html", default="", help="url to the header html")
+    parser.add_option("-f", "--footer-html", dest="footer_html", default="", help="url to the footer html")
     
     options, args = parser.parse_args()
     
