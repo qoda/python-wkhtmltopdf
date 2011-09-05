@@ -40,11 +40,9 @@ class WKhtmlToPdf(object):
         }
         
         for k, v in self.defaults.items():
-            print v[0], v[1]
             if not isinstance(v[0], v[1]):
                 try:
                     v[0] = v[1](v[0])
-                    print v[0]
                 except TypeError:
                     raise TypeError("%s argument required for %s" % (v[1].__name__.capitalize(), k))
             if k is "orientation" and v[0] not in ['Portrait', 'Landscape']:
@@ -95,7 +93,6 @@ class WKhtmlToPdf(object):
             self.url,
             self.output_file
         )
-        print command
         sys_output = int(os.system(command))
         
         # return file if successful else return error code
