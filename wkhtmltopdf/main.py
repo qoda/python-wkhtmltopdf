@@ -1,7 +1,114 @@
 #!/usr/bin/env python
-
 import os
 import optparse
+
+from subprocess import Popen
+from subprocess import PIPE
+
+
+class WKOption(object):
+    """Build an option to be used throughout"""
+    def __init__(self, name, shortcut, otype=str, action=None, dest=None,
+            default=None, help=None, validate=None, validate_error=None):
+        self.name = name
+        self.shortcut = shortcut
+        self.otype = bool if (default is True or default is False) else otype
+        self.action = "store_true" if self.otype is bool else "store"
+        self.dest = dest if dest else name.replace('-', '_')
+        self.default = default
+        self.help = help
+        self._validate = validate
+        self.validate_error = validate_error
+
+        # we're going to want to get the values in here
+        self.value = None
+
+    def validate(self):
+        if self.validate is None:
+            return True
+
+        # only try to validate if we have a function to do so
+        if self.validate(self.value):
+            return True
+        else:
+            return False, self.validate_error
+
+    def long(self):
+        return '--' + self.name.replace('_', '-')
+
+    def to_cmd(self):
+        """Return the str() of this command, bool is just --long, etc"""
+        if self.otype is bool:
+            if self.value:
+                return self.long()
+            else:
+                return ""
+        else:
+            return " ".join([self.long(), str(self.value)
+                            if self.value is not None else ""])
+
+
+OPTIONS = [
+    WKOption('enable-plugins', '-F',
+                 default=True,
+                 help="use flash and other plugins",
+                 ),
+    WKOption('disable-javascript', '-J',
+                 default=False,
+                 help="disable javascript",
+                 ),
+    WKOption('no-background', '-b',
+                 default=False,
+                 help="do not print background",
+                 ),
+    WKOption('grayscale', '-g',
+                 default=False,
+                 help="make greyscale",
+                 ),
+    WKOption('redirect-delay', '-d',
+                 default=0,
+                 help="page delay before conversion",
+                 ),
+    WKOption('orientation', '-O',
+                 default="Portrait",
+                 help="page orientation",
+                 validate=lambda x: x in ['Portrait', 'Landscape'],
+                 validate_error="Orientation argument must be either Portrait or Landscape"
+                 ),
+    WKOption('dpi', '-D',
+                 default=100,
+                 help="print dpi",
+                 ),
+    WKOption('username', '-U',
+                 default="",
+                 help="http username",
+                 ),
+    WKOption('password', '-P',
+                 default="",
+                 help="http password",
+                 ),
+    WKOption('margin-bottom', '-B',
+                 default=10,
+                 help="bottom page margin, default 10mm",
+                 ),
+    WKOption('margin-top', '-T',
+                 default=10,
+                 help="top page margin, default 10mm",
+                 ),
+    WKOption('margin-left', '-L',
+                 default=10,
+                 help="left page margin, default 10mm",
+                 ),
+    WKOption('margin-right', '-R',
+                 default=10,
+                 help="right page margin, default 10mm",
+                 ),
+    WKOption('disable-smart-shrinking', None,
+                 default=False,
+                 help="Disable the intelligent shrinking strategy used by WebKit that makes the pixel/dpi ratio none constant",
+                 ),
+]
+
 
 class WKhtmlToPdf(object):
     """
@@ -10,74 +117,34 @@ class WKhtmlToPdf(object):
     def __init__(self, *args, **kwargs):
         self.url = None
         self.output_file = None
-        
+
         # get the url and output_file options
         try:
             self.url, self.output_file = args[0], args[1]
         except IndexError:
             pass
-        
+
         if not self.url or not self.output_file:
             raise Exception("Missing url and output file arguments")
-            
+
         # save the file to /tmp if a full path is not specified
         output_path = os.path.split(self.output_file)[0]
         if not output_path:
             self.output_file = os.path.join('/tmp', self.output_file)
-        
-        self.defaults = {
-            'screen_resolution': [kwargs.get('screen_resolution', [1024, 768]), list],
-            'color_depth': [kwargs.get('color_depth', 24), int],
-            'flash_plugin': [kwargs.get('flash_plugin', True), bool],
-            'disable_javascript': [kwargs.get('disable_javascript', False), bool],
-            'delay': [kwargs.get('delay', 0), int],
-            'orientation': [kwargs.get('orientation', 'Portrait'), str],
-            'dpi': [kwargs.get('dpi', 100), int],
-            'no_background': [kwargs.get('no_background', False), bool],
-            'grayscale': [kwargs.get('grayscale', False), bool],
-            'http_username': [kwargs.get('http_username', ""), str],
-            'http_password': [kwargs.get('http_password', ""), str],
-        }
-        
-        for k, v in self.defaults.items():
-            if not isinstance(v[0], v[1]):
-                try:
-                    v[0] = v[1](v[0])
-                except TypeError:
-                    raise TypeError("%s argument required for %s" % (v[1].__name__.capitalize(), k))
-            if k is "orientation" and v[0] not in ['Portrait', 'Landscape']:
-                raise TypeError("Orientation argument must be either Portrait or Landscape")
-            setattr(self, k, v[0])
-    
-    def _create_option_list(self):
-        """
-        Add command option according to the default settings.
-        """
-        option_list = []
-        if self.flash_plugin:
-            option_list.append("--enable-plugins")
-        if self.disable_javascript:
-            option_list.append("--disable-javascript")
-        if self.no_background:
-            option_list.append("--no-background")
-        if self.grayscale:
-            option_list.append("--grayscale")
-        if self.delay:
-            option_list.append("--redirect-delay %s" % self.delay)
-        if self.http_username:
-            option_list.append("--username %s" % self.http_username)
-        if self.http_password:
-            option_list.append("--password %s" % self.http_password)
-        option_list.append("--orientation %s" % self.orientation)
-        option_list.append("--dpi %s" % self.dpi)
-        
-        return option_list
-        
+
+        # set the options per the kwargs coming in
+        for o in OPTIONS:
+            o.value = kwargs.get(o.dest)
+
+        self.params = [o.to_cmd() for o in OPTIONS]
+        self.screen_resolution = [1024, 768]
+        self.color_depth = 24
+
     def render(self):
         """
         Render the URL into a pdf and setup the evironment if required.
         """
-        
+
         # setup the environment if it isn't set up yet
         if not os.getenv('DISPLAY'):
             os.system("Xvfb :0 -screen 0 %sx%sx%s & " % (
@@ -86,42 +153,57 @@ class WKhtmlToPdf(object):
                 self.color_depth
             ))
             os.putenv("DISPLAY", '127.0.0.1:0')
-        
+
         # execute the command
         command = 'wkhtmltopdf %s "%s" "%s" >> /tmp/wkhtp.log' % (
-            " ".join(self._create_option_list()),
-            self.url,
-            self.output_file
-        )
-        sys_output = int(os.system(command))
-        
-        # return file if successful else return error code
-        if not sys_output:
-            return True, self.output_file
-        return False, sys_output
-        
+                        " ".join([cmd for cmd in self.params]),
+                        self.url,
+                        self.output_file
+                  )
+        try:
+            p = Popen(command, shell=True,
+                        stdout=PIPE, stderr=PIPE, close_fds=True)
+            stdout, stderr = p.communicate()
+            retcode = p.returncode
+
+            if retcode == 0:
+                # call was successful
+                return
+            elif retcode < 0:
+                raise Exception("terminated by signal: ", -retcode)
+            else:
+                raise Exception(stderr)
+
+        except OSError, exc:
+            raise exc
+
+
 def wkhtmltopdf(*args, **kwargs):
     wkhp = WKhtmlToPdf(*args, **kwargs)
     wkhp.render()
-    
+
+
 if __name__ == '__main__':
-    
+
     # parse through the system argumants
     usage = "Usage: %prog [options] url output_file"
     parser = optparse.OptionParser()
-    
-    parser.add_option("-F", "--flash-plugin", action="store_true", dest="flash_plugin", default=True, help="use flash plugin")
-    parser.add_option("-J", "--disable-javascript", action="store_true", dest="disable_javascript", default=False, help="disable javascript")
-    parser.add_option("-b", "--no-background", action="store_true", dest="no_background", default=False, help="do not print background")
-    parser.add_option("-g", "--grayscale", action="store_true", dest="grayscale", default=False, help="make grayscale")
-    parser.add_option("-d", "--redirect-delay", dest="delay", default=0, help="page delay before convertion")
-    parser.add_option("-O", "--orientation", dest="orientation", default='Portrait', help="page orientation")
-    parser.add_option("-D", "--dpi", dest="dpi", default=100, help="print dpi")
-    parser.add_option("-U", "--username", dest="http_username", default="", help="http username")
-    parser.add_option("-P", "--password", dest="http_password", default="", help="http password")
-    
+
+    for o in OPTIONS:
+        if o.shortcut:
+            parser.add_option(o.shortcut, o.long(),
+                              action=o.action,
+                              dest=o.dest,
+                              default=o.default,
+                              help=o.help)
+        else:
+            parser.add_option(o.long(),
+                              action=o.action,
+                              dest=o.dest,
+                              default=o.default,
+                              help=o.help)
+
     options, args = parser.parse_args()
-    
+
     # call the main method with parsed argumants
     wkhtmltopdf(*args, **options.__dict__)
-    
