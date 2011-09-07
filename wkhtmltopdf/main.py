@@ -1,9 +1,6 @@
 #!/usr/bin/env python
-
 import os
 import optparse
-
-OPTIONS = []
 
 
 class WKOption(object):
@@ -44,7 +41,8 @@ class WKOption(object):
             else:
                 return ""
         else:
-            return " ".join([self.long(), str(self.value) if self.value is not None else ""])
+            return " ".join([self.long(), str(self.value)
+                            if self.value is not None else ""])
 
 
 OPTIONS = [
@@ -108,6 +106,7 @@ OPTIONS = [
                  ),
 ]
 
+
 class WKhtmlToPdf(object):
     """
     Convert an html page via its URL into a pdf.
@@ -165,9 +164,11 @@ class WKhtmlToPdf(object):
             return True, self.output_file
         return False, sys_output
 
+
 def wkhtmltopdf(*args, **kwargs):
     wkhp = WKhtmlToPdf(*args, **kwargs)
     wkhp.render()
+
 
 if __name__ == '__main__':
 
