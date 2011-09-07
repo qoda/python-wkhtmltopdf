@@ -2,6 +2,9 @@
 import os
 import optparse
 
+from subprocess import Popen
+from subprocess import PIPE
+
 
 class WKOption(object):
     """Build an option to be used throughout"""
@@ -157,12 +160,22 @@ class WKhtmlToPdf(object):
                         self.url,
                         self.output_file
                   )
-        sys_output = int(os.system(command))
+        try:
+            p = Popen(command, shell=True,
+                        stdout=PIPE, stderr=PIPE, close_fds=True)
+            stdout, stderr = p.communicate()
+            retcode = p.returncode
 
-        # return file if successful else return error code
-        if not sys_output:
-            return True, self.output_file
-        return False, sys_output
+            if retcode == 0:
+                # call was successful
+                return
+            elif retcode < 0:
+                raise Exception("terminated by signal: ", -retcode)
+            else:
+                raise Exception(stderr)
+
+        except OSError, exc:
+            raise exc
 
 
 def wkhtmltopdf(*args, **kwargs):
