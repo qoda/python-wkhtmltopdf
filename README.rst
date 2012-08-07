@@ -8,6 +8,7 @@ Requirements
 System:
 ~~~~~~~
 
+- Linux 32/64 or OSX only (Windows is not supported at this stage)
 - Xvfd
 - wkhtmltopdf
 - flashplugin-nonfree
