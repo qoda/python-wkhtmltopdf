@@ -7,9 +7,10 @@ from subprocess import PIPE
 
 
 class WKOption(object):
-    """Build an option to be used throughout"""
-    def __init__(self, name, shortcut, otype=str, action=None, dest=None,
-            default=None, help=None, validate=None, validate_error=None):
+    """
+    Build an option to be used throughout
+    """
+    def __init__(self, name, shortcut, otype=str, action=None, dest=None, default=None, help=None, validate=None, validate_error=None):
         self.name = name
         self.shortcut = shortcut
         self.otype = bool if (default is True or default is False) else otype
@@ -44,69 +45,29 @@ class WKOption(object):
             else:
                 return ""
         else:
-            return " ".join([self.long(), str(self.value)
-                            if self.value is not None else ""])
+            return " ".join([self.long(), str(self.value) if self.value is not None else ""])
 
 
 OPTIONS = [
-    WKOption('enable-plugins', '-F',
-                 default=True,
-                 help="use flash and other plugins",
-                 ),
-    WKOption('disable-javascript', '-J',
-                 default=False,
-                 help="disable javascript",
-                 ),
-    WKOption('no-background', '-b',
-                 default=False,
-                 help="do not print background",
-                 ),
-    WKOption('grayscale', '-g',
-                 default=False,
-                 help="make greyscale",
-                 ),
-    WKOption('redirect-delay', '-d',
-                 default=0,
-                 help="page delay before conversion",
-                 ),
-    WKOption('orientation', '-O',
-                 default="Portrait",
-                 help="page orientation",
-                 validate=lambda x: x in ['Portrait', 'Landscape'],
-                 validate_error="Orientation argument must be either Portrait or Landscape"
-                 ),
-    WKOption('dpi', '-D',
-                 default=100,
-                 help="print dpi",
-                 ),
-    WKOption('username', '-U',
-                 default="",
-                 help="http username",
-                 ),
-    WKOption('password', '-P',
-                 default="",
-                 help="http password",
-                 ),
-    WKOption('margin-bottom', '-B',
-                 default=10,
-                 help="bottom page margin, default 10mm",
-                 ),
-    WKOption('margin-top', '-T',
-                 default=10,
-                 help="top page margin, default 10mm",
-                 ),
-    WKOption('margin-left', '-L',
-                 default=10,
-                 help="left page margin, default 10mm",
-                 ),
-    WKOption('margin-right', '-R',
-                 default=10,
-                 help="right page margin, default 10mm",
-                 ),
-    WKOption('disable-smart-shrinking', None,
-                 default=False,
-                 help="Disable the intelligent shrinking strategy used by WebKit that makes the pixel/dpi ratio none constant",
-                 ),
+    WKOption('enable-plugins', '-F', default=True, help="use flash and other plugins"),
+    WKOption('disable-javascript', '-J', default=False, help="disable javascript"),
+    WKOption('no-background', '-b', default=False, help="do not print background"),
+    WKOption('grayscale', '-g', default=False, help="make greyscale"),
+    WKOption('redirect-delay', '-d', default=0, help="page delay before conversion"),
+    WKOption('orientation', '-O', default="Portrait", help="page orientation",
+        validate=lambda x: x in ['Portrait', 'Landscape'],
+        validate_error="Orientation argument must be either Portrait or Landscape"
+    ),
+    WKOption('dpi', '-D', default=100, help="print dpi"),
+    WKOption('username', '-U', default="", help="http username"),
+    WKOption('password', '-P', default="", help="http password"),
+    WKOption('margin-bottom', '-B', default=10, help="bottom page margin, default 10mm"),
+    WKOption('margin-top', '-T', default=10, help="top page margin, default 10mm"),
+    WKOption('margin-left', '-L', default=10, help="left page margin, default 10mm"),
+    WKOption('margin-right', '-R', default=10, help="right page margin, default 10mm"),
+    WKOption('disable-smart-shrinking', None, default=False,
+        help="Disable the intelligent shrinking strategy used by WebKit that makes the pixel/dpi ratio none constant",
+    ),
 ]
 
 
@@ -156,13 +117,12 @@ class WKhtmlToPdf(object):
 
         # execute the command
         command = 'wkhtmltopdf %s "%s" "%s" >> /tmp/wkhtp.log' % (
-                        " ".join([cmd for cmd in self.params]),
-                        self.url,
-                        self.output_file
-                  )
+            " ".join([cmd for cmd in self.params]),
+            self.url,
+            self.output_file
+        )
         try:
-            p = Popen(command, shell=True,
-                        stdout=PIPE, stderr=PIPE, close_fds=True)
+            p = Popen(command, shell=True, stdout=PIPE, stderr=PIPE, close_fds=True)
             stdout, stderr = p.communicate()
             retcode = p.returncode
 
@@ -170,7 +130,7 @@ class WKhtmlToPdf(object):
                 # call was successful
                 return
             elif retcode < 0:
-                raise Exception("terminated by signal: ", -retcode)
+                raise Exception("Terminated by signal: ", -retcode)
             else:
                 raise Exception(stderr)
 
@@ -191,17 +151,22 @@ if __name__ == '__main__':
 
     for o in OPTIONS:
         if o.shortcut:
-            parser.add_option(o.shortcut, o.long(),
-                              action=o.action,
-                              dest=o.dest,
-                              default=o.default,
-                              help=o.help)
+            parser.add_option(
+                o.shortcut,
+                o.long(),
+                action=o.action,
+                dest=o.dest,
+                default=o.default,
+                help=o.help
+            )
         else:
-            parser.add_option(o.long(),
-                              action=o.action,
-                              dest=o.dest,
-                              default=o.default,
-                              help=o.help)
+            parser.add_option(
+                o.long(),
+                action=o.action,
+                dest=o.dest,
+                default=o.default,
+                help=o.help
+            )
 
     options, args = parser.parse_args()
 
