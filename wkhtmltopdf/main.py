@@ -10,7 +10,7 @@ class WKOption(object):
     """
     Build an option to be used throughout
     """
-    def __init__(self, name, shortcut, otype=str, action=None, dest=None, default=None, help=None, validate=None, validate_error=None):
+    def __init__(self, name, shortcut, otype=str, action=None, dest=None, default=None, help=None, validate=None, validate_error=None, value=None):
         self.name = name
         self.shortcut = shortcut
         self.otype = bool if (default is True or default is False) else otype
@@ -21,8 +21,11 @@ class WKOption(object):
         self._validate = validate
         self.validate_error = validate_error
 
-        # we're going to want to get the values in here
-        self.value = None
+        # if there's a value passed to us use it, else use the default
+        if value is not None:
+            self.value = value
+        else:
+            self.value = default
 
     def validate(self):
         if self.validate is None:
@@ -53,7 +56,6 @@ OPTIONS = [
     WKOption('disable-javascript', '-J', default=False, help="disable javascript"),
     WKOption('no-background', '-b', default=False, help="do not print background"),
     WKOption('grayscale', '-g', default=False, help="make greyscale"),
-    WKOption('redirect-delay', '-d', default=0, help="page delay before conversion"),
     WKOption('orientation', '-O', default="Portrait", help="page orientation",
         validate=lambda x: x in ['Portrait', 'Landscape'],
         validate_error="Orientation argument must be either Portrait or Landscape"
@@ -81,6 +83,8 @@ class WKhtmlToPdf(object):
 
         # get the url and output_file options
         try:
+            self.url, self.output_file = kwargs['url'], kwargs['output_file']
+        except KeyError:
             self.url, self.output_file = args[0], args[1]
         except IndexError:
             pass
@@ -94,8 +98,13 @@ class WKhtmlToPdf(object):
             self.output_file = os.path.join('/tmp', self.output_file)
 
         # set the options per the kwargs coming in
+        print "Setting options as per kwargs..."
         for o in OPTIONS:
-            o.value = kwargs.get(o.dest)
+            try:
+                o.value = kwargs[o.dest] #try to get the value for that kwarg passed to us.
+                print "%s is now %s" % (o.name, o.value)
+            except KeyError:
+                pass; #can't find? just ignore and move on
 
         self.params = [o.to_cmd() for o in OPTIONS]
         self.screen_resolution = [1024, 768]
