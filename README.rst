@@ -53,9 +53,9 @@ Simple Usage::
 
 1. Use from class::
     
-    from wkhtmltopdf import WKHtmlToPdf
+    from wkhtmltopdf import WKhtmlToPdf
     
-    wkhtmltopdf = WKHtmlToPdf(
+    wkhtmltopdf = WKhtmlToPdf(
         url='http://www.example.com',
         output_file='~/example.pdf',
     )
