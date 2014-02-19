@@ -4,7 +4,7 @@ import urlparse
 
 from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
 
-from main import WKhtmlToPdf
+from wkhtmltopdf.main import WKHtmlToPdf
 
 HOST = '127.0.0.1'
 PORT = 8888
@@ -72,12 +72,12 @@ class RequestHandler(BaseHTTPRequestHandler):
         for k, v in self.query_dict.items():
             options_dict[k] = v[0]
 
-        wkhtp = WKhtmlToPdf(self.url, self.output_file, **options_dict)
+        wkhtp = WKHtmlToPdf(self.url, self.output_file, **options_dict)
         output_file = wkhtp.render()
 
         # send json response
         if output_file[0]:
-            self.handle_200("the file has been saved", output_file[1])
+            self.handle_200("The file has been saved", output_file[1])
         else:
             self.handle_500("%s - the file could not be created" % output_file[1])
 
@@ -86,8 +86,8 @@ if __name__ == '__main__':
     # parse through the system argumants
     usage = "usage: %prog [options]"
     parser = optparse.OptionParser()
-    parser.add_option("-H", "--host", dest="host", default=HOST, help="server host name")
-    parser.add_option("-p", "--port", dest="port", default=PORT, help="port to run the api on")
+    parser.add_option("-H", "--host", dest="host", default=HOST, help="Server host name.")
+    parser.add_option("-p", "--port", dest="port", default=PORT, help="Port to run the api on.")
     options, args = parser.parse_args()
 
     # set host and port

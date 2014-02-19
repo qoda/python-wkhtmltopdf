@@ -1,2 +1,2 @@
-from main import WKhtmlToPdf, wkhtmltopdf
-import api
+import wkhtmltopdf.api
+from wkhtmltopdf.main import WKHtmlToPdf, wkhtmltopdf

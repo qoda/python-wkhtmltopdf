@@ -103,15 +103,14 @@ class WKHtmlToPdf(object):
             self.output_file = os.path.join('/tmp', self.output_file)
 
         # set the options per the kwargs coming in
-        print "Setting options as per kwargs..."
-        for o in OPTIONS:
+        for option in OPTIONS:
             try:
-                o.value = kwargs[o.dest]  # try to get the value for that kwarg passed to us.
-                print "%s is now %s" % (o.name, o.value)
+                option.value = kwargs[option.dest]  # try to get the value for that kwarg passed to us.
+                print "%s is now %s" % (option.name, option.value)
             except KeyError:
                 pass  # can't find? just ignore and move on
 
-        self.params = [o.to_cmd() for o in OPTIONS]
+        self.params = [option.to_cmd() for option in OPTIONS]
         self.screen_resolution = [1024, 768]
         self.color_depth = 24
 
