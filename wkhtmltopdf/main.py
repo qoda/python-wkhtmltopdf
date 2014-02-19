@@ -106,7 +106,6 @@ class WKHtmlToPdf(object):
         for option in OPTIONS:
             try:
                 option.value = kwargs[option.dest]  # try to get the value for that kwarg passed to us.
-                print "%s is now %s" % (option.name, option.value)
             except KeyError:
                 pass  # can't find? just ignore and move on
 
