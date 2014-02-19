@@ -32,19 +32,34 @@ class MainTestCase(unittest.TestCase):
 
         # test disable_javascript option
         self.wkhtmltopdf.disable_javascript = True
-        self.assertEqual(self.wkhtmltopdf._create_option_list(), ['--disable-javascript', '--orientation Landscape', '--dpi 300'])
+        self.assertEqual(
+            self.wkhtmltopdf._create_option_list(), ['--disable-javascript', '--orientation Landscape', '--dpi 300']
+        )
 
         # test delay option
         self.wkhtmltopdf.delay = 1
-        self.assertEqual(self.wkhtmltopdf._create_option_list(), ['--disable-javascript', '--redirect-delay 1', '--orientation Landscape', '--dpi 300'])
+        self.assertEqual(
+            self.wkhtmltopdf._create_option_list(), [
+                '--disable-javascript', '--redirect-delay 1', '--orientation Landscape', '--dpi 300'
+            ]
+        )
 
         # test no_background option
         self.wkhtmltopdf.no_background = True
-        self.assertEqual(self.wkhtmltopdf._create_option_list(), ['--disable-javascript', '--no-background', '--redirect-delay 1', '--orientation Landscape', '--dpi 300'])
+        self.assertEqual(
+            self.wkhtmltopdf._create_option_list(), [
+                '--disable-javascript', '--no-background', '--redirect-delay 1', '--orientation Landscape', '--dpi 300'
+            ]
+        )
 
         # test grayscale option
         self.wkhtmltopdf.grayscale = True
-        self.assertEqual(self.wkhtmltopdf._create_option_list(), ['--disable-javascript', '--no-background', '--grayscale', '--redirect-delay 1', '--orientation Landscape', '--dpi 300'])
+        self.assertEqual(
+            self.wkhtmltopdf._create_option_list(), [
+                '--disable-javascript', '--no-background', '--grayscale', '--redirect-delay 1',
+                '--orientation Landscape', '--dpi 300'
+            ]
+        )
 
     def test_wkhtmltopdf_callable(self):
         wkhtmltopdf(self.url, self.output_file)
