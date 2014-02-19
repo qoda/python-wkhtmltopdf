@@ -98,8 +98,13 @@ class WKhtmlToPdf(object):
             self.output_file = os.path.join('/tmp', self.output_file)
 
         # set the options per the kwargs coming in
+        print "Setting options as per kwargs..."
         for o in OPTIONS:
-            o.value = kwargs.get(o.dest)
+            try:
+                o.value = kwargs[o.dest] #try to get the value for that kwarg passed to us.
+                print "%s is now %s" % (o.name, o.value)
+            except KeyError:
+                pass; #can't find? just ignore and move on
 
         self.params = [o.to_cmd() for o in OPTIONS]
         self.screen_resolution = [1024, 768]
