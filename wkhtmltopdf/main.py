@@ -56,7 +56,6 @@ OPTIONS = [
     WKOption('disable-javascript', '-J', default=False, help="disable javascript"),
     WKOption('no-background', '-b', default=False, help="do not print background"),
     WKOption('grayscale', '-g', default=False, help="make greyscale"),
-    WKOption('redirect-delay', '-d', default=0, help="page delay before conversion"),
     WKOption('orientation', '-O', default="Portrait", help="page orientation",
         validate=lambda x: x in ['Portrait', 'Landscape'],
         validate_error="Orientation argument must be either Portrait or Landscape"
