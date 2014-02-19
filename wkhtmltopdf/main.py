@@ -10,7 +10,7 @@ class WKOption(object):
     """
     Build an option to be used throughout
     """
-    def __init__(self, name, shortcut, otype=str, action=None, dest=None, default=None, help=None, validate=None, validate_error=None):
+    def __init__(self, name, shortcut, otype=str, action=None, dest=None, default=None, help=None, validate=None, validate_error=None, value=None):
         self.name = name
         self.shortcut = shortcut
         self.otype = bool if (default is True or default is False) else otype
@@ -21,8 +21,11 @@ class WKOption(object):
         self._validate = validate
         self.validate_error = validate_error
 
-        # we're going to want to get the values in here
-        self.value = None
+        # if there's a value passed to us use it, else use the default
+        if value is not None:
+            self.value = value
+        else:
+            self.value = default
 
     def validate(self):
         if self.validate is None:
