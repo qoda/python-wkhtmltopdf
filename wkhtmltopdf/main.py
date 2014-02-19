@@ -83,6 +83,8 @@ class WKhtmlToPdf(object):
 
         # get the url and output_file options
         try:
+            self.url, self.output_file = kwargs['url'], kwargs['output_file']
+        except KeyError:
             self.url, self.output_file = args[0], args[1]
         except IndexError:
             pass
