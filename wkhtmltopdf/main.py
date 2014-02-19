@@ -10,7 +10,8 @@ class WKOption(object):
     """
     Build an option to be used throughout
     """
-    def __init__(self, name, shortcut, otype=str, action=None, dest=None, default=None, help=None, validate=None, validate_error=None, value=None):
+    def __init__(self, name, shortcut, otype=str, action=None, dest=None, default=None, help=None, validate=None, \
+                 validate_error=None, value=None):
         self.name = name
         self.shortcut = shortcut
         self.otype = bool if (default is True or default is False) else otype
@@ -41,7 +42,9 @@ class WKOption(object):
         return '--' + self.name.replace('_', '-')
 
     def to_cmd(self):
-        """Return the str() of this command, bool is just --long, etc"""
+        """
+        Return the str of this command, bool is just --long, etc
+        """
         if self.otype is bool:
             if self.value:
                 return self.long()
@@ -52,28 +55,30 @@ class WKOption(object):
 
 
 OPTIONS = [
-    WKOption('enable-plugins', '-F', default=True, help="use flash and other plugins"),
-    WKOption('disable-javascript', '-J', default=False, help="disable javascript"),
-    WKOption('no-background', '-b', default=False, help="do not print background"),
-    WKOption('grayscale', '-g', default=False, help="make greyscale"),
-    WKOption('orientation', '-O', default="Portrait", help="page orientation",
+    WKOption('enable-plugins', '-F', default=True, help="Use flash and other plugins."),
+    WKOption('disable-javascript', '-J', default=False, help="Disable javascript."),
+    WKOption('no-background', '-b', default=False, help="Do not print background."),
+    WKOption('grayscale', '-g', default=False, help="Make greyscale."),
+    WKOption(
+        'orientation', '-O', default="Portrait", help="Set page orientation.",
         validate=lambda x: x in ['Portrait', 'Landscape'],
         validate_error="Orientation argument must be either Portrait or Landscape"
     ),
-    WKOption('dpi', '-D', default=100, help="print dpi"),
-    WKOption('username', '-U', default="", help="http username"),
-    WKOption('password', '-P', default="", help="http password"),
-    WKOption('margin-bottom', '-B', default=10, help="bottom page margin, default 10mm"),
-    WKOption('margin-top', '-T', default=10, help="top page margin, default 10mm"),
-    WKOption('margin-left', '-L', default=10, help="left page margin, default 10mm"),
-    WKOption('margin-right', '-R', default=10, help="right page margin, default 10mm"),
-    WKOption('disable-smart-shrinking', None, default=False,
+    WKOption('dpi', '-D', default=100, help="Set DPI"),
+    WKOption('username', '-U', default="", help="Set the HTTP username"),
+    WKOption('password', '-P', default="", help="Set the HTTP password"),
+    WKOption('margin-bottom', '-B', default=10, help="Bottom page margin."),
+    WKOption('margin-top', '-T', default=10, help="Top page margin."),
+    WKOption('margin-left', '-L', default=10, help="Left page margin."),
+    WKOption('margin-right', '-R', default=10, help="Right page margin."),
+    WKOption(
+        'disable-smart-shrinking', None, default=False,
         help="Disable the intelligent shrinking strategy used by WebKit that makes the pixel/dpi ratio none constant",
-    ),
+    )
 ]
 
 
-class WKhtmlToPdf(object):
+class WKHtmlToPdf(object):
     """
     Convert an html page via its URL into a pdf.
     """
@@ -101,10 +106,10 @@ class WKhtmlToPdf(object):
         print "Setting options as per kwargs..."
         for o in OPTIONS:
             try:
-                o.value = kwargs[o.dest] #try to get the value for that kwarg passed to us.
+                o.value = kwargs[o.dest]  # try to get the value for that kwarg passed to us.
                 print "%s is now %s" % (o.name, o.value)
             except KeyError:
-                pass; #can't find? just ignore and move on
+                pass  # can't find? just ignore and move on
 
         self.params = [o.to_cmd() for o in OPTIONS]
         self.screen_resolution = [1024, 768]
@@ -148,7 +153,7 @@ class WKhtmlToPdf(object):
 
 
 def wkhtmltopdf(*args, **kwargs):
-    wkhp = WKhtmlToPdf(*args, **kwargs)
+    wkhp = WKHtmlToPdf(*args, **kwargs)
     wkhp.render()
 
 
@@ -158,23 +163,23 @@ if __name__ == '__main__':
     usage = "Usage: %prog [options] url output_file"
     parser = optparse.OptionParser()
 
-    for o in OPTIONS:
-        if o.shortcut:
+    for option in OPTIONS:
+        if option.shortcut:
             parser.add_option(
-                o.shortcut,
-                o.long(),
-                action=o.action,
-                dest=o.dest,
-                default=o.default,
-                help=o.help
+                option.shortcut,
+                option.long(),
+                action=option.action,
+                dest=option.dest,
+                default=option.default,
+                help=option.help
             )
         else:
             parser.add_option(
-                o.long(),
-                action=o.action,
-                dest=o.dest,
-                default=o.default,
-                help=o.help
+                option.long(),
+                action=option.action,
+                dest=option.dest,
+                default=option.default,
+                help=option.help
             )
 
     options, args = parser.parse_args()

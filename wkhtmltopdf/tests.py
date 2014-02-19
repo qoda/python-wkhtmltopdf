@@ -4,7 +4,7 @@ import os
 import unittest
 import urllib
 
-from main import WKhtmlToPdf, wkhtmltopdf
+from main import WKHtmlToPdf, wkhtmltopdf
 from api import HOST, PORT
 
 
@@ -12,7 +12,7 @@ class MainTestCase(unittest.TestCase):
     def setUp(self):
         self.url = "http://www.example.com"
         self.output_file = "/tmp/example.pdf"
-        self.wkhtmltopdf = WKhtmlToPdf(self.url, self.output_file)
+        self.wkhtmltopdf = WKHtmlToPdf(self.url, self.output_file)
 
     def test_wkhtmltopdf_options(self):
         # test default options
