@@ -64,6 +64,13 @@ OPTIONS = [
         validate=lambda x: x in ['Portrait', 'Landscape'],
         validate_error="Orientation argument must be either Portrait or Landscape"
     ),
+    WKOption(
+        'page-size', '-s', default="A4", help="Set page size.",
+        validate=lambda x: x in ['A4', 'Letter'],
+        validate_error="Page size argument must be A4 or Letter"
+    ),
+    WKOption('print-media-type', '', default = False, help="Set print media type."),
+
     WKOption('dpi', '-D', default=100, help="Set DPI"),
     WKOption('username', '-U', default="", help="Set the HTTP username"),
     WKOption('password', '-P', default="", help="Set the HTTP password"),
