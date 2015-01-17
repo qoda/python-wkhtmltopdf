@@ -1,6 +1,6 @@
 python-wkhtmltopdf
 ==================
-A simple python wrapper for the wkhtmltopdf lib (http://code.google.com/p/wkhtmltopdf/)
+A simple python wrapper for the wkhtmltopdf lib (https://github.com/wkhtmltopdf/wkhtmltopdf)
 
 Requirements
 ------------
