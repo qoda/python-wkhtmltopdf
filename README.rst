@@ -1,3 +1,8 @@
+NO LONGER MAINTAINED
+====================
+
+
+
 python-wkhtmltopdf
 ==================
 A simple python wrapper for the wkhtmltopdf lib (https://github.com/wkhtmltopdf/wkhtmltopdf)
